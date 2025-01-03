@@ -46,8 +46,16 @@ off Xiaomi or its affiliates' products.
 Conversion rules of MIoT-Spec-V2 instance to Home Assistant entity.
 """
 from homeassistant.components.sensor import SensorDeviceClass
+from homeassistant.components.sensor import SensorStateClass
 from homeassistant.components.event import EventDeviceClass
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass     
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass
+
+from homeassistant.const import (
+    UnitOfEnergy,
+    UnitOfPower,
+    UnitOfElectricCurrent,
+    UnitOfElectricPotential,
+)
 
 # pylint: disable=pointless-string-statement
 """SPEC_DEVICE_TRANS_MAP
@@ -326,7 +334,11 @@ SPEC_SERVICE_TRANS_MAP: dict[str, dict | str] = {
     'properties': {
         '<property instance name>':{
             'device_class': str,
-            'entity': str
+            'entity': str,
+            'optional':{
+                'state_class': str,
+                'unit_of_measurement': str
+            }
         }
     }
 }
@@ -337,10 +349,10 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
             'format': {'int', 'float'},
             'access': {'read'}
         },
-        'binary_sensor': {                                                     
-            'format': {'bool'},                                               
-            'access': {'read'}                                                 
-        },   
+        'binary_sensor': {
+            'format': {'bool'},
+            'access': {'read'}
+        },
         'switch': {
             'format': {'bool'},
             'access': {'read', 'write'}
@@ -386,7 +398,11 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
         },
         'voltage': {
             'device_class': SensorDeviceClass.VOLTAGE,
-            'entity': 'sensor'
+            'entity': 'sensor',
+            'optional': {
+                'state_class': SensorStateClass.MEASUREMENT,
+                'unit_of_measurement': UnitOfElectricPotential.VOLT
+            }
         },
         'illumination': {
             'device_class': SensorDeviceClass.ILLUMINANCE,
@@ -396,13 +412,45 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
             'device_class': SensorDeviceClass.DURATION,
             'entity': 'sensor'
         },
-        'submersion-state': {                                                 
-            'device_class': BinarySensorDeviceClass.MOISTURE,                  
-            'entity': 'binary_sensor'                                           
-        },                                                                     
-        'contact-state': {                                                      
-            'device_class': BinarySensorDeviceClass.DOOR,                     
-            'entity': 'binary_sensor'                                          
+        'electric-power': {
+            'device_class': SensorDeviceClass.POWER,
+            'entity': 'sensor',
+            'optional': {
+                'state_class': SensorStateClass.MEASUREMENT,
+                'unit_of_measurement': UnitOfPower.WATT
+            }
+        },
+        'electric-current': {
+            'device_class': SensorDeviceClass.CURRENT,
+            'entity': 'sensor',
+            'optional': {
+                'state_class': SensorStateClass.MEASUREMENT,
+                'unit_of_measurement': UnitOfElectricCurrent.AMPERE
+            }
+        },
+        'power-consumption': {
+            'device_class': SensorDeviceClass.ENERGY,
+            'entity': 'sensor',
+            'optional': {
+                'state_class': SensorStateClass.TOTAL_INCREASING,
+                'unit_of_measurement': UnitOfEnergy.KILO_WATT_HOUR
+            }
+        },
+        'total-battery': {
+            'device_class': SensorDeviceClass.ENERGY,
+            'entity': 'sensor',
+            'optional': {
+                'state_class': SensorStateClass.TOTAL_INCREASING,
+                'unit_of_measurement': UnitOfEnergy.KILO_WATT_HOUR
+            }
+        },
+        'submersion-state': {
+            'device_class': BinarySensorDeviceClass.MOISTURE,
+            'entity': 'binary_sensor'
+        },
+        'contact-state': {
+            'device_class': BinarySensorDeviceClass.DOOR,
+            'entity': 'binary_sensor'
         },
         'has-someone-duration': 'no-one-determine-time',
         'no-one-duration': 'no-one-determine-time'
