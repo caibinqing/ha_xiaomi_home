@@ -90,5 +90,7 @@ class BinarySensor(MIoTPropertyEntity, BinarySensorEntity):
         """On/Off state. True if the binary sensor is on, False otherwise."""
         """If it is a door and windows sensor, revert the value."""            
         if self._attr_device_class == 'door':                                   
-            return not (self._value is True) 
+            return not (self._value is True)
+        elif self._attr_device_class == 'occupancy':
+            return bool(self._value)
         return self._value is True

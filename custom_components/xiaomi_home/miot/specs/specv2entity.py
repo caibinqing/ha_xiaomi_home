@@ -350,7 +350,7 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
             'access': {'read'}
         },
         'binary_sensor': {
-            'format': {'bool'},
+            'format': {'bool', 'int'},
             'access': {'read'}
         },
         'switch': {
@@ -451,6 +451,10 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
         'contact-state': {
             'device_class': BinarySensorDeviceClass.DOOR,
             'entity': 'binary_sensor'
+        },
+        'occupancy-status': {
+            'device_class': BinarySensorDeviceClass.OCCUPANCY,
+            'entity': 'binary_sensor',
         },
         'has-someone-duration': 'no-one-determine-time',
         'no-one-duration': 'no-one-determine-time'
