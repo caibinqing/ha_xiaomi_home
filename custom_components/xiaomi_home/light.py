@@ -50,6 +50,7 @@ import logging
 from typing import Any, Optional
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.light import (
@@ -85,6 +86,8 @@ async def async_setup_entry(
     new_entities = []
     for miot_device in device_list:
         for data in miot_device.entity_list.get('light', []):
+            if data.spec.name == 'indicator-light':
+                data.spec.entity_category = EntityCategory.CONFIG
             new_entities.append(
                 Light(miot_device=miot_device, entity_data=data))
 

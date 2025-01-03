@@ -56,6 +56,7 @@ from homeassistant.const import (
     CONCENTRATION_MILLIGRAMS_PER_CUBIC_METER,
     CONCENTRATION_PARTS_PER_BILLION,
     CONCENTRATION_PARTS_PER_MILLION,
+    EntityCategory,
     LIGHT_LUX,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS,
@@ -523,6 +524,8 @@ class MIoTDevice:
                 result['state_class'] = optional['state_class']
             if not prop.unit and 'unit_of_measurement' in optional:
                 result['unit_of_measurement'] = optional['unit_of_measurement']
+            if 'entity_category' in optional:
+                result['entity_category'] = optional['entity_category']
         return result
 
     def spec_transform(self) -> None:
@@ -557,6 +560,8 @@ class MIoTDevice:
                             prop_entity['unit_of_measurement'])
                         prop.icon = self.icon_convert(
                             prop_entity['unit_of_measurement'])
+                    if 'entity_category' in prop_entity:
+                        prop.entity_category = prop_entity['entity_category']
                 # general conversion
                 if not prop.platform:
                     if prop.writable:
@@ -567,8 +572,10 @@ class MIoTDevice:
                             prop.device_class = SwitchDeviceClass.SWITCH
                         elif prop.value_list:
                             prop.platform = 'select'
+                            prop.entity_category = EntityCategory.CONFIG
                         elif prop.value_range:
                             prop.platform = 'number'
+                            prop.entity_category = EntityCategory.CONFIG
                         else:
                             # Irregular property will not be transformed.
                             pass
@@ -1037,6 +1044,7 @@ class MIoTPropertyEntity(Entity):
             f'{"* "if self.spec.proprietary else " "}'
             f'{self.service.description_trans} {spec.description_trans}')
         self._attr_available = miot_device.online
+        self._attr_entity_category = spec.entity_category
 
         _LOGGER.info(
             'new miot property entity, %s, %s, %s, %s, %s, %s, %s',

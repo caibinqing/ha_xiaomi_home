@@ -49,6 +49,7 @@ from __future__ import annotations
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.switch import SwitchEntity
@@ -71,6 +72,8 @@ async def async_setup_entry(
     new_entities = []
     for miot_device in device_list:
         for prop in miot_device.prop_list.get('switch', []):
+            if prop.name in ['alarm', 'physical-controls-locked']:
+                prop.entity_category = EntityCategory.CONFIG
             new_entities.append(Switch(miot_device=miot_device, spec=prop))
 
     if new_entities:

@@ -49,6 +49,7 @@ from __future__ import annotations
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.event import EventEntity
@@ -70,6 +71,8 @@ async def async_setup_entry(
     new_entities = []
     for miot_device in device_list:
         for event in miot_device.event_list.get('event', []):
+            if event.name in ['low_battery', 'device_be_reset', 'device_forcibly_removed']:
+                event.entity_category = EntityCategory.DIAGNOSTIC
             new_entities.append(Event(miot_device=miot_device, spec=event))
 
     if new_entities:

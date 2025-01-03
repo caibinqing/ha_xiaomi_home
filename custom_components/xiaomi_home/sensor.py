@@ -50,6 +50,7 @@ import logging
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.components.sensor import SensorEntity, SensorDeviceClass
@@ -74,6 +75,8 @@ async def async_setup_entry(
     new_entities = []
     for miot_device in device_list:
         for prop in miot_device.prop_list.get('sensor', []):
+            if prop.name in ['charging-state', 'mode', 'fault', 'water-level']:
+                prop.entity_category = EntityCategory.DIAGNOSTIC
             new_entities.append(Sensor(miot_device=miot_device, spec=prop))
 
     if new_entities:

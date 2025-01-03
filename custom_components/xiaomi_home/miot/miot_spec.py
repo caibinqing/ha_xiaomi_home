@@ -82,6 +82,7 @@ class MIoTSpecBase:
     state_class: Any
     icon: str
     external_unit: Any
+    entity_category: Any
 
     spec_id: str
 
@@ -100,6 +101,7 @@ class MIoTSpecBase:
         self.state_class = None
         self.icon = None
         self.external_unit = None
+        self.entity_category = None
 
         self.spec_id = hash(f'{self.type_}.{self.iid}')
 

@@ -51,6 +51,7 @@ from homeassistant.components.event import EventDeviceClass
 from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 
 from homeassistant.const import (
+    EntityCategory,
     UnitOfEnergy,
     UnitOfPower,
     UnitOfElectricCurrent,
@@ -336,6 +337,7 @@ SPEC_SERVICE_TRANS_MAP: dict[str, dict | str] = {
             'device_class': str,
             'entity': str,
             'optional':{
+                'entity_category': str,
                 'state_class': str,
                 'unit_of_measurement': str
             }
@@ -394,7 +396,10 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
         'voc-density': 'tvoc-density',
         'battery-level': {
             'device_class': SensorDeviceClass.BATTERY,
-            'entity': 'sensor'
+            'entity': 'sensor',
+            'optional': {
+                'entity_category': EntityCategory.DIAGNOSTIC
+            }
         },
         'voltage': {
             'device_class': SensorDeviceClass.VOLTAGE,
