@@ -103,6 +103,31 @@ class MIoTSpecBase:
 
         self.spec_id = hash(f'{self.type_}.{self.iid}')
 
+    def is_wellknown_service(self):
+        if self.iid == 2:
+            return True
+        if self.name in [
+            "submersion-sensor",
+            "occupancy-sensor",
+            "magnet-sensor",
+            "electric-blanket",
+            "motion-sensor",
+            "window-opener",
+
+            "illumination-sensor",
+            "battery",
+            "environment",
+            "filter",
+            "alarm",
+            "physical-controls-locked",
+            "power-consumption",
+            "temperature-humidity-sensor",
+            "switch-sensor-for-ble",
+            "repellent",
+        ]:
+            return True
+        return False
+
     def __hash__(self) -> int:
         return self.spec_id
 
