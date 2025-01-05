@@ -104,7 +104,7 @@ class Sensor(MIoTPropertyEntity, SensorEntity):
                 self._attr_native_unit_of_measurement = list(
                     unit_sets)[0] if unit_sets else None
         # Set icon
-        if spec.icon:
+        if spec.icon and not self.device_class:
             self._attr_icon = spec.icon
         # Set state_class
         if spec.state_class:
