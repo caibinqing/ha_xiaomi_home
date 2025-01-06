@@ -56,6 +56,7 @@ from homeassistant.const import (
     CONCENTRATION_MILLIGRAMS_PER_CUBIC_METER,
     CONCENTRATION_PARTS_PER_BILLION,
     CONCENTRATION_PARTS_PER_MILLION,
+    EntityCategory,
     LIGHT_LUX,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS,
@@ -483,6 +484,9 @@ class MIoTDevice:
         # event
         # No actions or events is in SPEC_SERVICE_TRANS_MAP now.
         service.platform = platform
+        # entity_category:
+        if service.name in ['indicator-light']:
+            service.entity_category = EntityCategory.CONFIG
         return entity_data
 
     def parse_miot_property_entity(
@@ -578,6 +582,19 @@ class MIoTDevice:
                         else:
                             prop.platform = 'sensor'
                 if prop.platform:
+                    # entity_category:
+                    if (
+                        prop.service.name in ['no-disturb']
+                        or prop.name in ['no-one-determine-time', 'default-power-on-state', 'alarm', 'physical-controls-locked', 'flex-switch', 'mute', 'led-enable', 'countdown-time', 'fast-heating']
+                        or (prop.name in ['mode', 'sleep-level'] and prop.platform == 'select')
+                    ):
+                        prop.entity_category = EntityCategory.CONFIG
+                    if (
+                        prop.service.name in ['battery', 'filter', 'mode', 'power-consumption']
+                        or prop.name in ['fault', 'water-level', 'working-time']
+                        or (prop.name == 'mode' and prop.platform == 'sensor')
+                    ):
+                        prop.entity_category = EntityCategory.DIAGNOSTIC
                     self.append_prop(prop=prop)
             # STEP 3.2: event conversion
             for event in service.events:
@@ -597,6 +614,11 @@ class MIoTDevice:
                     action.platform = 'notify'
                 else:
                     action.platform = 'button'
+                # entity_category:
+                if action.name in ['motor-calibrate']:
+                    action.entity_category = EntityCategory.CONFIG
+                if action.service.name in ['filter', 'identify']:
+                    action.entity_category = EntityCategory.DIAGNOSTIC
                 self.append_action(action=action)
 
     def unit_convert(self, spec_unit: str) -> Optional[str]:
@@ -756,6 +778,7 @@ class MIoTServiceEntity(Entity):
         self._attr_should_poll = False
         self._attr_has_entity_name = True
         self._attr_available = miot_device.online
+        self._attr_entity_category = entity_data.spec.entity_category
 
         self._event_occurred_handler = None
         self._prop_changed_subs = {}
@@ -1038,6 +1061,7 @@ class MIoTPropertyEntity(Entity):
             f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
             f'{spec.description_trans}')
         self._attr_available = miot_device.online
+        self._attr_entity_category = spec.entity_category
 
         _LOGGER.info(
             'new miot property entity, %s, %s, %s, %s, %s, %s, %s',
@@ -1285,6 +1309,7 @@ class MIoTActionEntity(Entity):
             f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
             f'{spec.description_trans}')
         self._attr_available = miot_device.online
+        self._attr_entity_category = spec.entity_category
 
         _LOGGER.debug(
             'new miot action entity, %s, %s, %s, %s, %s',

@@ -82,6 +82,7 @@ class MIoTSpecBase:
     state_class: Any
     icon: str
     external_unit: Any
+    entity_category: Any
 
     spec_id: str
 
@@ -100,6 +101,7 @@ class MIoTSpecBase:
         self.state_class = None
         self.icon = None
         self.external_unit = None
+        self.entity_category = None
 
         self.spec_id = hash(f'{self.type_}.{self.iid}')
 
@@ -325,6 +327,7 @@ class MIoTSpecInstance:
     platform: str
     device_class: Any
     icon: str
+    entity_category: str | None
 
     def __init__(
         self, urn: str = None, name: str = None,
@@ -335,6 +338,7 @@ class MIoTSpecInstance:
         self.description = description
         self.description_trans = description_trans
         self.services = []
+        self.entity_category = None
 
     def load(self, specs: dict) -> 'MIoTSpecInstance':
         self.urn = specs['urn']
