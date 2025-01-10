@@ -48,6 +48,7 @@ Conversion rules of MIoT-Spec-V2 instance to Home Assistant entity.
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorStateClass
 from homeassistant.components.event import EventDeviceClass
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 
 from homeassistant.const import (
     UnitOfEnergy,
@@ -348,6 +349,10 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
             'format': {'int', 'float'},
             'access': {'read'}
         },
+        'binary_sensor': {
+            'format': {'bool', 'int'},
+            'access': {'read'}
+        },
         'switch': {
             'format': {'bool'},
             'access': {'read', 'write'}
@@ -446,6 +451,18 @@ SPEC_PROP_TRANS_MAP: dict[str, dict | str] = {
                 'state_class': SensorStateClass.TOTAL_INCREASING,
                 'unit_of_measurement': UnitOfEnergy.KILO_WATT_HOUR
             }
+        },
+        'submersion-state': {
+            'device_class': BinarySensorDeviceClass.MOISTURE,
+            'entity': 'binary_sensor'
+        },
+        'contact-state': {
+            'device_class': BinarySensorDeviceClass.DOOR,
+            'entity': 'binary_sensor'
+        },
+        'occupancy-status': {
+            'device_class': BinarySensorDeviceClass.OCCUPANCY,
+            'entity': 'binary_sensor',
         },
         'has-someone-duration': 'no-one-determine-time',
         'no-one-duration': 'no-one-determine-time'
