@@ -935,13 +935,13 @@ class MIoTServiceEntity(Entity):
         # Gen entity id
         if isinstance(self.entity_data.spec, MIoTSpecInstance):
             self.entity_id = miot_device.gen_device_entity_id(DOMAIN)
-            self._attr_name = f' {self.entity_data.spec.description_trans}'
+            self._attr_name = f'{self.entity_data.spec.description_trans}'
         elif isinstance(self.entity_data.spec, MIoTSpecService):
             self.entity_id = miot_device.gen_service_entity_id(
                 DOMAIN, siid=self.entity_data.spec.iid,
                 description=self.entity_data.spec.description)
             self._attr_name = (
-                f'{"* "if self.entity_data.spec.proprietary else " "}'
+                f'{"* "if self.entity_data.spec.proprietary else ""}'
                 f'{self.entity_data.spec.description_trans}')
             self._attr_entity_category = entity_data.spec.entity_category
         # Set entity attr
@@ -1248,8 +1248,9 @@ class MIoTPropertyEntity(Entity):
         self._attr_should_poll = False
         self._attr_has_entity_name = True
         self._attr_name = (
-            f'{"* "if self.spec.proprietary else " "}'
-            f'{self.service.description_trans} {spec.description_trans}')
+            f'{"* "if self.spec.proprietary else ""}'
+            f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
+            f'{spec.description_trans}')
         self._attr_available = miot_device.online
 
         _LOGGER.info(
@@ -1390,8 +1391,9 @@ class MIoTEventEntity(Entity):
         self._attr_should_poll = False
         self._attr_has_entity_name = True
         self._attr_name = (
-            f'{"* "if self.spec.proprietary else " "}'
-            f'{self.service.description_trans} {spec.description_trans}')
+            f'{"* "if self.spec.proprietary else ""}'
+            f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
+            f'{spec.description_trans}')
         self._attr_available = miot_device.online
         self._attr_event_types = [spec.description_trans]
 
@@ -1501,8 +1503,9 @@ class MIoTActionEntity(Entity):
         self._attr_should_poll = False
         self._attr_has_entity_name = True
         self._attr_name = (
-            f'{"* "if self.spec.proprietary else " "}'
-            f'{self.service.description_trans} {spec.description_trans}')
+            f'{"* "if self.spec.proprietary else ""}'
+            f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
+            f'{spec.description_trans}')
         self._attr_available = miot_device.online
 
         _LOGGER.debug(
