@@ -472,6 +472,61 @@ class _MIoTSpecBase:
 
         self.spec_id = hash(f'{self.type_}.{self.iid}')
 
+    def is_wellknown_service(self):
+        if self.proprietary:
+            return False
+        if self.name in [
+            'switch',
+            'light',
+            'fan',
+        ] and self.iid == 2:
+            return True
+        if self.name in [
+            # 'airer',
+            # 'curtain',
+            'switch-sensor-for-ble',
+            'air-purifier',
+            # 'air-fryer',
+            # 'humidifier',
+            'water-purifier',
+            'temperature-humidity-sensor',
+            # 'heater',
+            # 'washer',
+            # 'water-heater',
+            # 'ptc-bath-heater',
+            # 'kettle',
+            # 'dishwasher',
+            'motion-sensor',
+            # 'fridge',
+            # 'dehumidifier',
+            # 'air-fresh',
+            # 'cooker',
+            # 'projector',
+            'submersion-sensor',
+            # 'gas-sensor',
+            # 'smoke-sensor',
+
+            'doorbell',
+            'electric-blanket',
+            'gateway',
+            'illumination-sensor',
+            'magnet-sensor',
+            'occupancy-sensor',
+            'repellent',
+            'video-doorbell',
+            'window-opener',
+
+            'alarm',
+            'battery',
+            'environment',
+            'filter',
+            'physical-controls-locked',
+            'power-consumption',
+            'tds-sensor',
+        ]:
+            return True
+        return False
+
     def __hash__(self) -> int:
         return self.spec_id
 
