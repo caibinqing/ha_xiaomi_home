@@ -549,6 +549,10 @@ SPEC_PROP_TRANS_MAP: dict = {
             'device_class': BinarySensorDeviceClass.OCCUPANCY,
             'entity': 'binary_sensor',
         },
+        'charging-state': {
+            'device_class': BinarySensorDeviceClass.BATTERY_CHARGING,
+            'entity': 'binary_sensor',
+        },
         'temperature': {
             'device_class': SensorDeviceClass.TEMPERATURE,
             'entity': 'sensor',
@@ -617,6 +621,18 @@ SPEC_PROP_TRANS_MAP: dict = {
             'entity': 'sensor',
             'state_class': SensorStateClass.MEASUREMENT,
             'unit_of_measurement': UnitOfElectricCurrent.AMPERE
+        },
+        'power-replenishment': {
+            'device_class': None,
+            'entity': 'sensor',
+            'state_class': SensorStateClass.MEASUREMENT,
+            'unit_of_measurement': 'mAh'
+        },
+        'realtime-current-in': {
+            'device_class': SensorDeviceClass.CURRENT,
+            'entity': 'sensor',
+            'state_class': SensorStateClass.MEASUREMENT,
+            'unit_of_measurement': UnitOfElectricCurrent.MILLIAMPERE,
         },
         'illumination': {
             'device_class': SensorDeviceClass.ILLUMINANCE,
