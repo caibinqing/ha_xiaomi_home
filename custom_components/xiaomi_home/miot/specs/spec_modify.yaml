@@ -75,3 +75,7 @@ urn:miot-spec-v2:device:water-purifier:0000A013:yunmi-s20:1:  ## 云米泉先AI�
   prop.4.2:
     name: tds-out
     unit: ppm
+urn:miot-spec-v2:device:window-opener:0000A043:linp-wd1lb:1:0000C825:  # 领普平移推窗器WD1
+  prop.3.2:
+    name: charging-state
+    expr: src_value==1
