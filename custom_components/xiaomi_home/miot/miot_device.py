@@ -906,6 +906,8 @@ class MIoTDevice:
             return 'mdi:network'
         if spec_unit in {'calorie', 'kCal'}:
             return 'mdi:food'
+        if spec_unit in {'mAh'}:
+            return 'mdi:lightning-bolt'
         if spec_unit in {'rpm'}:
             return 'mdi:fan-clock'
         return None

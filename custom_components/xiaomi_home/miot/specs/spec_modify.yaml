@@ -632,3 +632,6 @@ urn:miot-spec-v2:device:water-purifier:0000A013:yunmi-s20:1:
     unit: ppm
   prop.4.2:
     unit: ppm
+urn:miot-spec-v2:device:window-opener:0000A043:linp-wd1lb:1:0000C825:  # linp.wopener.wd1lb
+  prop.3.2:  # charging-state
+    expr: src_value==1
