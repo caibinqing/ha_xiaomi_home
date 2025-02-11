@@ -47,7 +47,7 @@ Cover entities for Xiaomi Home.
 """
 from __future__ import annotations
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -178,21 +178,41 @@ class Cover(MIoTServiceEntity, CoverEntity):
                     self._prop_position_value_min)
                 self._attr_supported_features |= CoverEntityFeature.SET_POSITION
                 self._prop_target_position = prop
+        if self._prop_status is None and self._prop_current_position is not None:
+            self.sub_prop_changed(self._prop_current_position, self._position_changed_handler)
+
+    def _position_changed_handler(self, prop: MIoTSpecProperty, ctx: Any) -> None:
+        self._attr_is_opening = False
+        self._attr_is_closing = False
+        self.async_write_ha_state()
 
     async def async_open_cover(self, **kwargs) -> None:
         """Open the cover."""
+        current = self.get_prop_value(prop=self._prop_current_position)
         await self.set_property_async(
             self._prop_motor_control, self._prop_motor_value_open)
+        if current is not None and current < 100:
+            self._attr_is_opening = True
+            self._attr_is_closing = False
+            self.async_write_ha_state()
 
     async def async_close_cover(self, **kwargs) -> None:
         """Close the cover."""
+        current = self.get_prop_value(prop=self._prop_current_position)
         await self.set_property_async(
             self._prop_motor_control, self._prop_motor_value_close)
+        if current is not None and current > 0:
+            self._attr_is_opening = False
+            self._attr_is_closing = True
+            self.async_write_ha_state()
 
     async def async_stop_cover(self, **kwargs) -> None:
         """Stop the cover."""
         await self.set_property_async(
             self._prop_motor_control, self._prop_motor_value_pause)
+        self._attr_is_opening = False
+        self._attr_is_closing = False
+        self.async_write_ha_state()
 
     async def async_set_cover_position(self, **kwargs) -> None:
         """Set the position of the cover."""
@@ -200,8 +220,13 @@ class Cover(MIoTServiceEntity, CoverEntity):
         if pos is None:
             return None
         pos = round(pos*self._prop_position_value_range/100)
+        current = self.get_prop_value(prop=self._prop_current_position)
         await self.set_property_async(
             prop=self._prop_target_position, value=pos)
+        if current is not None:
+            self._attr_is_opening = pos > current
+            self._attr_is_closing = pos < current
+            self.async_write_ha_state()
 
     @property
     def current_cover_position(self) -> Optional[int]:
@@ -218,7 +243,7 @@ class Cover(MIoTServiceEntity, CoverEntity):
     def is_opening(self) -> Optional[bool]:
         """Return if the cover is opening."""
         if self._prop_status is None:
-            return None
+            return self._attr_is_opening
         return self.get_prop_value(
             prop=self._prop_status) == self._prop_status_opening
 
@@ -226,7 +251,7 @@ class Cover(MIoTServiceEntity, CoverEntity):
     def is_closing(self) -> Optional[bool]:
         """Return if the cover is closing."""
         if self._prop_status is None:
-            return None
+            return self._attr_is_closing
         return self.get_prop_value(
             prop=self._prop_status) == self._prop_status_closing
 
