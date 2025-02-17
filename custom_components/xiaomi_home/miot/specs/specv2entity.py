@@ -365,6 +365,7 @@ SPEC_SERVICE_TRANS_MAP: dict = {
     },
     'fan-control': 'fan',
     'ceiling-fan': 'fan',
+    'air-purifier': 'fan',
     'water-heater': {
         'required': {
             'properties': {
