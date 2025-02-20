@@ -184,11 +184,14 @@ class FeaturePresetMode(MIoTServiceEntity, ClimateEntity):
 
         super().__init__(miot_device=miot_device, entity_data=entity_data)
         # properties
-        for prop in entity_data.props:
-            if prop.name == 'heat-level' and prop.service.name == 'heater':
+        self._init_preset_mode_property('heater', 'heat-level')
+
+    def _init_preset_mode_property(self, service_name: str, prop_name: str):
+        for prop in self.entity_data.props:
+            if prop.name == prop_name and prop.service.name == service_name:
                 if not prop.value_list:
-                    _LOGGER.error('invalid heater heat-level value_list, %s',
-                                  self.entity_id)
+                    _LOGGER.error('invalid %s %s value_list, %s',service_name,
+                                  prop_name, self.entity_id)
                     continue
                 self._mode_map = prop.value_list.to_map()
                 self._attr_preset_modes = prop.value_list.descriptions
@@ -747,21 +750,8 @@ class ElectricBlanket(FeatureOnOff, FeatureTargetTemperature,
         self._attr_icon = 'mdi:radiator'
         # hvac modes
         self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
-
         # preset modes
-        for prop in entity_data.props:
-            if prop.name == 'mode' and prop.service.name == 'electric-blanket':
-                if not prop.value_list:
-                    _LOGGER.error(
-                        'invalid electric-blanket mode value_list, %s',
-                        self.entity_id)
-                    continue
-                self._mode_map = prop.value_list.to_map()
-                self._attr_preset_modes = prop.value_list.descriptions
-                self._attr_supported_features |= (
-                    ClimateEntityFeature.PRESET_MODE)
-                self._prop_mode = prop
-
+        self._init_preset_mode_property('electric-blanket', 'mode')
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set the target hvac mode."""
