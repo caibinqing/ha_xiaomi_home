@@ -183,10 +183,9 @@ class FeaturePresetMode(MIoTServiceEntity, ClimateEntity):
         self._mode_map = None
 
         super().__init__(miot_device=miot_device, entity_data=entity_data)
-        # properties
-        self._init_preset_mode_property('heater', 'heat-level')
 
-    def _init_preset_mode_property(self, service_name: str, prop_name: str):
+    def _init_preset_modes(self, service_name: str, prop_name: str) -> None:
+        """Initialize the preset modes."""
         for prop in self.entity_data.props:
             if prop.name == prop_name and prop.service.name == service_name:
                 if not prop.value_list:
@@ -446,6 +445,8 @@ class Heater(FeatureOnOff, FeatureTargetTemperature, FeatureTemperature,
         self._attr_icon = 'mdi:radiator'
         # hvac modes
         self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
+        # preset modes
+        self._init_preset_modes('heater', 'heat-level')
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set the target hvac mode."""
@@ -751,7 +752,7 @@ class ElectricBlanket(FeatureOnOff, FeatureTargetTemperature,
         # hvac modes
         self._attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
         # preset modes
-        self._init_preset_mode_property('electric-blanket', 'mode')
+        self._init_preset_modes('electric-blanket', 'mode')
 
     async def async_set_hvac_mode(self, hvac_mode: HVACMode) -> None:
         """Set the target hvac mode."""

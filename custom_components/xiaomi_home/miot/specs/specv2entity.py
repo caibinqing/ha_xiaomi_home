@@ -303,11 +303,12 @@ SPEC_DEVICE_TRANS_MAP: dict = {
             'electric-blanket': {
                 'required': {
                     'properties': {
-                        'on': {'read', 'write'}
+                        'on': {'read', 'write'},
+                        'target-temperature': {'read', 'write'},
                     }
                 },
                 'optional': {
-                    'properties': {'target-temperature', 'temperature', 'mode'}
+                    'properties': {'temperature', 'mode'}
                 },
             }
         },
