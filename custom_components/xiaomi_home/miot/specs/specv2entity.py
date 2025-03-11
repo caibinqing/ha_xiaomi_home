@@ -483,6 +483,10 @@ SPEC_PROP_TRANS_MAP: dict = {
             'device_class': BinarySensorDeviceClass.BATTERY_CHARGING,
             'entity': 'binary_sensor',
         },
+        'illumination-state': {
+            'device_class': BinarySensorDeviceClass.LIGHT,
+            'entity': 'binary_sensor',
+        },
         'temperature': {
             'device_class': SensorDeviceClass.TEMPERATURE,
             'entity': 'sensor',
