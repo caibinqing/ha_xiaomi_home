@@ -180,6 +180,18 @@ urn:miot-spec-v2:device:plant-monitor:0000A030:hhcc-v1:1:
     name: soil-ec
     icon: mdi:sprout-outline
     unit: μS/cm
+urn:miot-spec-v2:device:magnet-sensor:0000A016:isa-dw2hl:1:  # 小米门窗传感器2
+  prop.2.1:
+    name: illumination-state
+    expr: src_value==2
+urn:miot-spec-v2:device:motion-sensor:0000A014:lumi-bmgl01:1:  # 小米人体传感器2
+  prop.2.1:
+    name: illumination-state
+    expr: src_value==2
+urn:miot-spec-v2:device:night-light:0000A0AB:yeelink-nl1:1:  # 米家夜灯2
+  prop.4.1:
+    name: illumination-state
+    expr: src_value>50
 urn:miot-spec-v2:device:air-monitor:0000A008:cgllc-s1:1:
   prop.2.5:
     name: voc-density
