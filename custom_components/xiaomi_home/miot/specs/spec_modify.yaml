@@ -77,6 +77,14 @@ urn:miot-spec-v2:device:router:0000A036:xiaomi-rd08:1:
 urn:miot-spec-v2:device:window-opener:0000A043:linp-wd1lb:1:0000C825:  # 领普 平移推窗器WD1
   prop.3.2:  # charging-state
     expr: src_value==1
+urn:miot-spec-v2:device:safe-box:0000A042:loock-v1:1:  # 米家智能保管箱
+  prop.5.1:
+    name: contact-state
+    expr: src_value!=0
+urn:miot-spec-v2:device:magnet-sensor:0000A016:linp-m1:1:  # 领普门窗传感器MS1
+  prop.2.1004:
+    name: contact-state
+    expr: src_value!=1
 urn:miot-spec-v2:device:airer:0000A00D:hyd-znlyj5:1:
   prop.2.3:
     value-range:
