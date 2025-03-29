@@ -357,6 +357,10 @@ urn:miot-spec-v2:device:light:0000A001:shhf-sfla12:1:
 urn:miot-spec-v2:device:light:0000A001:shhf-sflt11:1:0000C802:
   prop.11.14:
     name: on-power
+urn:miot-spec-v2:device:magnet-sensor:0000A016:isa-dw2hl:1:  # isa.magnet.dw2hl
+  prop.2.1:
+    name: illumination-state
+    expr: src_value==2
 urn:miot-spec-v2:device:magnet-sensor:0000A016:linp-m1:1:
   prop.2.1004:
     name: contact-state
@@ -372,7 +376,10 @@ urn:miot-spec-v2:device:motion-sensor:0000A014:lumi-acn001:1:
     - read
     - notify
     unit: mV
-urn:miot-spec-v2:device:motion-sensor:0000A014:lumi-bmgl01:1:
+urn:miot-spec-v2:device:motion-sensor:0000A014:lumi-bmgl01:1:  # lumi.motion.bmgl01
+  prop.2.1:
+    name: illumination-state
+    expr: src_value==2
   prop.2.2:
     value-list:
     - value: 0
@@ -384,6 +391,10 @@ urn:miot-spec-v2:device:motion-sensor:0000A014:lumi-bmgl01:1:
 urn:miot-spec-v2:device:motor-controller:0000A01D:adp-adswb4:1:0000C837:
   prop.2.1:
     name: motor-switch
+urn:miot-spec-v2:device:night-light:0000A0AB:yeelink-nl1:1:  # yeelink.light.nl1
+  prop.4.1:
+    name: illumination-state
+    expr: src_value>50
 urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:ainice-3b:1: urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:ainice-3b:2
 urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:ainice-3b:2:
   prop.2.5:
