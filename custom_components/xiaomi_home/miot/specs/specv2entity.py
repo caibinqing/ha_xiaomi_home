@@ -528,7 +528,7 @@ SPEC_PROP_TRANS_MAP: dict = {
             'access': {'read'}
         },
         'binary_sensor': {
-            'format': {'bool', 'int'},
+            'format': {'bool', 'int', 'float'},
             'access': {'read'}
         },
         'switch': {
@@ -551,6 +551,10 @@ SPEC_PROP_TRANS_MAP: dict = {
         },
         'charging-state': {
             'device_class': BinarySensorDeviceClass.BATTERY_CHARGING,
+            'entity': 'binary_sensor',
+        },
+        'illumination-state': {
+            'device_class': BinarySensorDeviceClass.LIGHT,
             'entity': 'binary_sensor',
         },
         'temperature': {
