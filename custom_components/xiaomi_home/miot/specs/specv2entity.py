@@ -559,6 +559,7 @@ SPEC_SERVICE_TRANS_MAP: dict = {
             'entity': str,
             'state_class'?: str,
             'unit_of_measurement'?: str
+            'entity_category'?: str
         }
     }
 }
@@ -714,3 +715,82 @@ SPEC_EVENT_TRANS_MAP: dict[str, str] = {
 }
 
 SPEC_ACTION_TRANS_MAP = {}
+
+# 需要添加 EntityCategory 的 service
+SERVICE_WITH_CATEGORY = [
+    'filter',  # 空气净化器、风扇、加湿器、热水器、除湿机、新风机
+    'battery',  # 窗帘电机、可视门铃、猫眼、无线开关、风扇、蓝牙温湿度计、人体传感器、水浸传感器、燃气传感器、烟雾传感器
+    'single-use-battery',
+
+    'screen',  # 空气净化器、风扇、加湿器、电暖器、暖风机、热水器、电热水壶、除湿机、新风机、电饭煲
+    # 'alarm',  # 晾衣架、空气净化器、空气炸锅、风扇、加湿器、净水器、电暖器、暖风机、洗衣机、热水器、浴霸、电热水壶、洗碗机、除湿机、新风机、电饭煲、空调插座
+    # 'physical-controls-locked',  # 插座/插排、空气净化器、空气炸锅、风扇、加湿器、净水器、电暖器、暖风机、洗衣机、热水器、电热水壶、洗碗机、除湿机、新风机
+
+    'delay',  # 灯、插座/插排、风扇、加湿器、电暖器、暖风机、浴霸
+    'countdown',  # 电热毯
+
+    'power-consumption',  # 开关、插座/插排、空调插座
+    'usage-report',  # 热水器
+
+    'no-disturb',  # 净水器、电热水壶
+    'self-check',  # 净水器、电饭煲、燃气传感器、烟雾传感器
+
+    'air-purifier-favorite',  # 空气净化器
+    'air-fresh-favorite',  # 新风机
+    'memory-card-management',  # 摄像机、猫眼
+    'detergent-management',  # 洗衣机、洗碗机
+    'fabric-softener-management',  # 洗衣机
+    'specialized-detergent-management',  # 洗衣机
+    'water-softener-management',  # 洗碗机
+    'remote-control-management',  # 浴霸
+
+    'water-use-details',  # 净水器
+    'water-dispenser',  # 净水器
+
+    'motion-detection',  # 摄像机
+    'speaker',  # 摄像机、可视门铃、猫眼
+    'microphone',  # 摄像机
+    'ai-detection',  # 摄像机
+    'auto-reply',  # 可视门铃、猫眼
+    'receiver',  # 可视门铃、猫眼
+    'p2p-stream',  # 摄像机、可视门铃、猫眼
+
+    'camera-fav-area',  # 摄像机
+    'cruise',  # 摄像机
+    'key-call',  # 摄像机
+    'smart-care',  # 摄像机
+    'camera-ipc-cloud',  # 摄像机
+    'idm',  # 摄像机
+    'virtual-fence',  # 摄像机
+
+    'focus-mode',  # 学习时间管理
+]
+
+# 需要添加 EntityCategory 的 prop
+PROP_WITH_CATEGORY = [
+    'alarm',
+    'fault',
+    'physical-controls-locked',
+    'mode',
+    'flex-switch',  # light
+    'default-power-on-state',  # light
+    'light-on-times',  # light
+    'working-time',  # light, switch
+    'no-one-determine-time',  # occupancy-sensor
+]
+
+# 需要添加 EntityCategory.CONFIG 的 action
+ACTION_CONFIG = [
+    'motor-calibrate',
+    'reset-filter-life',
+]
+
+# 需要添加 EntityCategory.DIAGNOSTIC 的 action
+ACTION_DIAGNOSTIC = [
+    'identify',
+]
+
+# 私有spec, 但是不需要添加 EntityCategory
+PROPRIETARY_SERVICE_EXCLUDE = [
+    'switch',
+]

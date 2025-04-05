@@ -57,6 +57,7 @@ from homeassistant.const import (
     CONCENTRATION_PARTS_PER_BILLION,
     CONCENTRATION_PARTS_PER_MILLION,
     DEGREE,
+    EntityCategory,
     LIGHT_LUX,
     REVOLUTIONS_PER_MINUTE,
     PERCENTAGE,
@@ -84,11 +85,15 @@ from homeassistant.components.switch import SwitchDeviceClass
 
 # pylint: disable=relative-beyond-top-level
 from .specs.specv2entity import (
+    ACTION_CONFIG,
+    ACTION_DIAGNOSTIC,
+    PROP_WITH_CATEGORY,
+    SERVICE_WITH_CATEGORY,
     SPEC_ACTION_TRANS_MAP,
     SPEC_DEVICE_TRANS_MAP,
     SPEC_EVENT_TRANS_MAP,
     SPEC_PROP_TRANS_MAP,
-    SPEC_SERVICE_TRANS_MAP
+    SPEC_SERVICE_TRANS_MAP, PROPRIETARY_SERVICE_EXCLUDE
 )
 from .common import slugify_name, slugify_did
 from .const import DOMAIN
@@ -662,6 +667,22 @@ class MIoTDevice:
                             prop.platform = 'binary_sensor'
                         else:
                             prop.platform = 'sensor'
+                # entity_category:
+                if prop.platform in ['number', 'select', 'switch', 'text'] and (
+                    (
+                        prop.proprietary
+                        and prop.service.name not in PROPRIETARY_SERVICE_EXCLUDE
+                    )
+                    or prop.service.name in SERVICE_WITH_CATEGORY
+                    or prop.name in PROP_WITH_CATEGORY
+                ):
+                    prop.entity_category = EntityCategory.CONFIG
+                if prop.platform in ['binary_sensor', 'sensor'] and (
+                    prop.proprietary
+                    or prop.service.name in SERVICE_WITH_CATEGORY
+                    or prop.name in PROP_WITH_CATEGORY
+                ):
+                    prop.entity_category = EntityCategory.DIAGNOSTIC
                 self.append_prop(prop=prop)
             # STEP 3.2: event conversion
             for event in service.events:
@@ -681,6 +702,11 @@ class MIoTDevice:
                     action.platform = 'notify'
                 else:
                     action.platform = 'button'
+                    # entity_category:
+                    if action.name in ACTION_CONFIG:
+                        action.entity_category = EntityCategory.CONFIG
+                    elif action.proprietary or action.name in ACTION_DIAGNOSTIC:
+                        action.entity_category = EntityCategory.DIAGNOSTIC
                 self.append_action(action=action)
 
     def unit_convert(self, spec_unit: str) -> Optional[str]:
@@ -1252,6 +1278,7 @@ class MIoTPropertyEntity(Entity):
             f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
             f'{spec.description_trans}')
         self._attr_available = miot_device.online
+        self._attr_entity_category = spec.entity_category
 
         _LOGGER.info(
             'new miot property entity, %s, %s, %s, %s, %s',
@@ -1507,6 +1534,7 @@ class MIoTActionEntity(Entity):
             f'{"" if self.service.is_wellknown_service() else (self.service.description_trans + " ")}'
             f'{spec.description_trans}')
         self._attr_available = miot_device.online
+        self._attr_entity_category = spec.entity_category
 
         _LOGGER.debug(
             'new miot action entity, %s, %s, %s, %s, %s',
