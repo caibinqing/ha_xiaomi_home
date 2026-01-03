@@ -54,7 +54,7 @@ from homeassistant.const import (CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
                                  EntityCategory, LIGHT_LUX, UnitOfEnergy,
                                  UnitOfPower, UnitOfElectricCurrent,
                                  UnitOfElectricPotential, UnitOfTemperature,
-                                 UnitOfPressure, PERCENTAGE)
+                                 UnitOfTime, UnitOfPressure, PERCENTAGE)
 
 # pylint: disable=pointless-string-statement
 """SPEC_DEVICE_TRANS_MAP
@@ -579,6 +579,12 @@ SPEC_PROP_TRANS_MAP: dict = {
         }
     },
     'properties': {
+        'brush-head-left-level': {
+            'device_class': SensorDeviceClass.DURATION,
+            'entity': 'sensor',
+            'state_class': SensorStateClass.MEASUREMENT,
+            'unit_of_measurement': UnitOfTime.DAYS,
+        },
         'submersion-state': {
             'device_class': BinarySensorDeviceClass.MOISTURE,
             'entity': 'binary_sensor'
