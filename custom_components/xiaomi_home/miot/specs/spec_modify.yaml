@@ -413,6 +413,10 @@ urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:izq-24:2:0000C824:
 urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:linp-hb01:2:0000C824:
   prop.3.3:
     unit: m
+urn:miot-spec-v2:device:occupancy-sensor:0000A0BF:linp-es5b:1:
+  prop.5.1019:
+    name: occupancy-status
+    expr: src_value==1
 urn:miot-spec-v2:device:outlet:0000A002:chuangmi-212a01:1: urn:miot-spec-v2:device:outlet:0000A002:chuangmi-212a01:3
 urn:miot-spec-v2:device:outlet:0000A002:chuangmi-212a01:2: urn:miot-spec-v2:device:outlet:0000A002:chuangmi-212a01:3
 urn:miot-spec-v2:device:outlet:0000A002:chuangmi-212a01:3:
