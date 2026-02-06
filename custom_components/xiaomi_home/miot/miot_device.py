@@ -361,9 +361,11 @@ class MIoTDevice:
 
     def gen_service_entity_id(self, ha_domain: str, siid: int,
                               description: str) -> str:
+        slug = slugify_name(description)
+        description_suffix = f'_{slug}' if slug else ''
         return (
             f'{ha_domain}.{self._model_strs[0][:9]}_{self.did_tag}_'
-            f'{self._model_strs[-1][:20]}_s_{siid}_{slugify_name(description)}')
+            f'{self._model_strs[-1][:20]}_s_{siid}{description_suffix}')
 
     def gen_prop_entity_id(
         self, ha_domain: str, spec_name: str, siid: int, piid: int
